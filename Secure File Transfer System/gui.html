@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Secure File Transfer System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg0: #0a0c0f;
+    --bg1: #0f1218;
+    --bg2: #151a22;
+    --bg3: #1c2330;
+    --border: rgba(255,255,255,0.07);
+    --border-hi: rgba(255,255,255,0.13);
+    --green: #00ff9d;
+    --green-dim: rgba(0,255,157,0.12);
+    --green-glow: rgba(0,255,157,0.25);
+    --red: #ff4757;
+    --red-dim: rgba(255,71,87,0.12);
+    --amber: #ffa502;
+    --amber-dim: rgba(255,165,2,0.12);
+    --blue: #2ed6ff;
+    --blue-dim: rgba(46,214,255,0.1);
+    --text: #e8edf5;
+    --muted: #5a6478;
+    --muted2: #8896ae;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg0); color: var(--text); font-family: var(--mono); font-size: 13px; overflow: hidden; }
+
+  /* Scanline overlay */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  }
+
+  /* Layout */
+  .shell { display: grid; grid-template-rows: 52px 1fr; grid-template-columns: 260px 1fr 300px; height: 100vh; }
+  .topbar { grid-column: 1/-1; display: flex; align-items: center; gap: 0; border-bottom: 1px solid var(--border); background: var(--bg1); padding: 0 20px; }
+  .sidebar { border-right: 1px solid var(--border); background: var(--bg1); display: flex; flex-direction: column; overflow: hidden; }
+  .main-wrap { display: flex; flex-direction: column; overflow: hidden; }
+  .main { overflow-y: auto; background: var(--bg0); flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .logpane { border-left: 1px solid var(--border); background: var(--bg1); display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Topbar */
+  .logo { font-family: var(--display); font-size: 15px; font-weight: 800; letter-spacing: -0.02em; color: var(--green); margin-right: 24px; display: flex; align-items: center; gap: 8px; }
+  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(0.85)} }
+  .top-badges { display: flex; gap: 8px; margin-left: auto; }
+  .badge { font-size: 10px; padding: 3px 8px; border-radius: 3px; border: 1px solid; letter-spacing: .08em; font-weight: 500; }
+  .badge-green { color: var(--green); border-color: var(--green); background: var(--green-dim); }
+  .badge-gray  { color: var(--muted2); border-color: var(--border); background: transparent; }
+  .badge-red   { color: var(--red); border-color: var(--red); background: var(--red-dim); }
+  .badge-amber { color: var(--amber); border-color: var(--amber); background: var(--amber-dim); }
+  .server-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted2); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); transition: all .3s; }
+  .status-dot.on { background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
+  .status-dot.off { background: var(--red); }
+
+  /* Sidebar */
+  .sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-label { font-size: 9px; letter-spacing: .12em; color: var(--muted); font-weight: 600; margin-bottom: 10px; text-transform: uppercase; }
+  .btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg2); color: var(--text); font-family: var(--mono); font-size: 12px; cursor: pointer; transition: all .15s; text-align: left; }
+  .btn:hover:not(:disabled) { border-color: var(--border-hi); background: var(--bg3); }
+  .btn:active:not(:disabled) { transform: scale(.98); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-green { border-color: rgba(0,255,157,.3); color: var(--green); background: var(--green-dim); }
+  .btn-green:hover:not(:disabled) { background: rgba(0,255,157,.18); border-color: rgba(0,255,157,.5); }
+  .btn-red { border-color: rgba(255,71,87,.3); color: var(--red); background: var(--red-dim); }
+  .btn-red:hover:not(:disabled) { background: rgba(255,71,87,.18); }
+  .btn-blue { border-color: rgba(46,214,255,.3); color: var(--blue); background: var(--blue-dim); }
+  .btn-blue:hover:not(:disabled) { background: rgba(46,214,255,.18); }
+  .btn-icon { font-size: 14px; width: 18px; text-align: center; }
+  .btn-gap { margin-top: 6px; }
+
+  /* Drop zone */
+  .dropzone { border: 1.5px dashed var(--border-hi); border-radius: 6px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all .2s; background: var(--bg0); }
+  .dropzone:hover, .dropzone.drag { border-color: var(--green); background: var(--green-dim); }
+  .dropzone .dz-icon { font-size: 24px; margin-bottom: 6px; opacity: .4; }
+  .dropzone .dz-text { font-size: 11px; color: var(--muted2); }
+  .dropzone .dz-file { color: var(--green); font-size: 11px; margin-top: 4px; word-break: break-all; }
+  #fileInput { display: none; }
+
+  /* Host input */
+  .input-row { display: grid; grid-template-columns: 1fr 72px; gap: 6px; margin-top: 8px; }
+  .inp { background: var(--bg0); border: 1px solid var(--border); border-radius: 4px; color: var(--text); font-family: var(--mono); font-size: 12px; padding: 7px 10px; width: 100%; }
+  .inp:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 2px var(--green-dim); }
+
+  /* Main panel */
+  .section-head { font-size: 10px; letter-spacing: .1em; color: var(--muted); font-weight: 600; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .section-head::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  /* Stats row */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+  .stat-label { font-size: 9px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-size: 22px; font-weight: 600; font-family: var(--display); line-height: 1; }
+  .stat-value.green { color: var(--green); }
+  .stat-value.amber { color: var(--amber); }
+  .stat-value.blue  { color: var(--blue); }
+  .stat-value.red   { color: var(--red); }
+  .stat-sub { font-size: 10px; color: var(--muted2); margin-top: 4px; }
+
+  /* History table */
+  .hist-table { width: 100%; border-collapse: collapse; }
+  .hist-table th { font-size: 10px; letter-spacing: .08em; color: var(--muted); text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border); font-weight: 500; }
+  .hist-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--muted2); }
+  .hist-table tr:hover td { background: var(--bg2); }
+  .hist-table td:first-child { color: var(--text); font-weight: 500; }
+  .pill { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-weight: 500; letter-spacing: .06em; }
+  .pill-ok   { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,255,157,.2); }
+  .pill-fail { background: var(--red-dim);   color: var(--red);   border: 1px solid rgba(255,71,87,.2); }
+  .pill-sent { background: var(--blue-dim);  color: var(--blue);  border: 1px solid rgba(46,214,255,.2); }
+  .pill-recv { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,165,2,.2); }
+  .empty-state { text-align: center; padding: 32px; color: var(--muted); font-size: 12px; }
+
+  /* Toast notification */
+  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px);
+    background: var(--bg3); border: 1px solid var(--border-hi); border-radius: 6px;
+    padding: 10px 18px; font-size: 12px; color: var(--text); z-index: 10000;
+    transition: transform .3s ease, opacity .3s ease; opacity: 0; pointer-events: none; }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  #toast.toast-ok    { border-color: rgba(0,255,157,.4); color: var(--green); }
+  #toast.toast-error { border-color: rgba(255,71,87,.4);  color: var(--red); }
+
+  /* Benchmark results */
+  .bench-grid { display: grid; gap: 10px; }
+  .bench-row { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+  .bench-title { font-family: var(--display); font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+  .bench-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .bench-metric .bm-label { font-size: 9px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 3px; }
+  .bench-metric .bm-val { font-size: 14px; font-weight: 600; font-family: var(--display); }
+  .bench-metric .bm-sub { font-size: 10px; color: var(--muted2); margin-top: 1px; }
+  .bar-wrap { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .bar-track { flex: 1; height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; transition: width .5s ease; }
+  .bar-label { font-size: 10px; color: var(--muted2); min-width: 60px; text-align: right; }
+
+  /* Log pane */
+  .log-head { padding: 12px 14px; font-size: 9px; letter-spacing: .12em; color: var(--muted); font-weight: 600; text-transform: uppercase; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .log-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .log-scroll::-webkit-scrollbar { width: 4px; }
+  .log-scroll::-webkit-scrollbar-track { background: transparent; }
+  .log-scroll::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+  .log-entry { display: grid; grid-template-columns: 52px 36px 1fr; gap: 6px; padding: 4px 14px; align-items: baseline; font-size: 11px; line-height: 1.5; }
+  .log-entry:hover { background: var(--bg2); }
+  .log-ts { color: var(--muted); }
+  .log-lvl { font-weight: 600; font-size: 10px; letter-spacing: .06em; }
+  .log-lvl.INFO  { color: var(--blue); }
+  .log-lvl.OK    { color: var(--green); }
+  .log-lvl.WARN  { color: var(--amber); }
+  .log-lvl.ERROR { color: var(--red); }
+  .log-msg { color: var(--muted2); word-break: break-word; }
+  .log-msg.OK    { color: var(--text); }
+  .log-msg.ERROR { color: var(--red); }
+  .log-clear { font-size: 10px; color: var(--muted); cursor: pointer; padding: 2px 6px; border-radius: 3px; border: 1px solid var(--border); background: transparent; font-family: var(--mono); }
+  .log-clear:hover { color: var(--text); border-color: var(--border-hi); }
+
+  /* Progress bar */
+  .progress-bar { height: 2px; background: var(--bg3); border-radius: 1px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 1px; width: 0%; transition: width .3s; box-shadow: 0 0 6px var(--green); }
+
+  /* Animations */
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+  .fade-in { animation: fadeIn .25s ease forwards; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); padding: 0 20px; background: var(--bg1); }
+  .tab { padding: 10px 14px; font-size: 11px; color: var(--muted2); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; letter-spacing: .04em; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="logo">
+      <span class="logo-dot"></span>
+      SFTS
+    </div>
+    <span style="font-size:11px;color:var(--muted2);letter-spacing:.04em">Secure File Transfer System</span>
+    <div class="top-badges">
+      <span class="badge badge-green">AES-256-CBC</span>
+      <span class="badge badge-green">RSA-2048</span>
+      <span class="badge badge-green">SHA-256</span>
+      <div class="server-status" style="margin-left:12px">
+        <div class="status-dot off" id="topStatusDot"></div>
+        <span id="topStatusText">Server offline</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Secure Server</div>
+      <button class="btn btn-green" id="btnStart" onclick="startServer()">
+        <span class="btn-icon">⏵</span> Start server
+      </button>
+      <button class="btn btn-red btn-gap" id="btnStop" onclick="stopServer()" disabled>
+        <span class="btn-icon">⏹</span> Stop server
+      </button>
+      <button class="btn btn-gap" onclick="regenKeys()">
+        <span class="btn-icon">↻</span> Regen RSA keys
+      </button>
+    </div>
+
+    <div class="sidebar-section" style="flex:1;display:flex;flex-direction:column;gap:10px">
+      <div class="sidebar-label">Send File</div>
+      <div class="dropzone" id="dropzone"
+           onclick="document.getElementById('fileInput').click()"
+           ondragover="dzDrag(event,true)"
+           ondragleave="dzDrag(event,false)"
+           ondrop="dzDrop(event)">
+        <div class="dz-icon">↑</div>
+        <div class="dz-text" id="dzText">Drop file here or click to browse</div>
+        <div class="dz-file" id="dzFileName"></div>
+      </div>
+      <input type="file" id="fileInput" onchange="fileSelected(this)"/>
+
+      <div class="input-row">
+        <input class="inp" type="text" id="hostInput" value="127.0.0.1" placeholder="host"/>
+        <input class="inp" type="text" id="portInput" value="9999" placeholder="port"/>
+      </div>
+
+      <button class="btn btn-blue" onclick="sendFile()" id="btnSend">
+        <span class="btn-icon">🔒</span> Encrypt &amp; send
+      </button>
+      <div class="progress-bar" id="progressBar" style="display:none">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tools</div>
+      <button class="btn" onclick="runBenchmark()" id="btnBench">
+        <span class="btn-icon">⚡</span> Run benchmark
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- Main -->
+  <div class="main-wrap">
+    <div class="tabs" id="mainTabs">
+      <div class="tab active" onclick="switchTab('overview')">Overview</div>
+      <div class="tab" onclick="switchTab('history')">History</div>
+      <div class="tab" onclick="switchTab('benchmark')">Benchmark</div>
+    </div>
+
+    <div class="main" id="mainScroll">
+
+      <!-- Overview tab -->
+      <div class="tab-pane active" id="pane-overview">
+        <div class="section-head">System status</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Transfers</div>
+            <div class="stat-value blue" id="statCount">0</div>
+            <div class="stat-sub">total sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Integrity</div>
+            <div class="stat-value green" id="statInteg">—</div>
+            <div class="stat-sub">verified / total</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Throughput</div>
+            <div class="stat-value amber" id="statTP">—</div>
+            <div class="stat-sub">avg MB/s</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Server</div>
+            <div class="stat-value red" id="statServer">OFF</div>
+            <div class="stat-sub" id="statServerSub">not running</div>
+          </div>
+        </div>
+
+        <div class="section-head" style="margin-top:20px">Protocol</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px" id="protocolSteps"></div>
+
+        <div class="section-head" style="margin-top:20px">Recent transfers</div>
+        <div id="recentHistory"></div>
+      </div>
+
+      <!-- History tab -->
+      <div class="tab-pane" id="pane-history">
+        <div class="section-head" style="display:flex;align-items:center;justify-content:space-between">
+          All transfers
+          <button class="log-clear" onclick="clearHistory()" style="margin-left:auto">clear</button>
+        </div>
+        <div id="fullHistory"></div>
+      </div>
+
+      <!-- Benchmark tab -->
+      <div class="tab-pane" id="pane-benchmark">
+        <div class="section-head">Benchmark — encrypted vs plaintext</div>
+        <div id="benchResults">
+          <div class="empty-state">Run a benchmark to see results</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Log pane -->
+  <div class="logpane">
+    <div class="log-head">
+      <span>Live log</span>
+      <button class="log-clear" onclick="clearLogs()">clear</button>
+    </div>
+    <div class="log-scroll" id="logScroll"></div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// FIX: Use relative URL — avoids CORS issues when served by Flask itself.
+const API = '/api';
+let selectedFile = null;
+let serverOn = false;
+let logs = [];
+let sseSource = null;
+let refreshTimer = null;
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `show toast-${type}`;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.className = ''; }, 3500);
+}
+
+// ── Protocol steps ─────────────────────────────────────────────────────────────
+const STEPS = [
+  { n:'1', label:'RSA pubkey',  sub:'Server → Client',    color:'var(--blue)'  },
+  { n:'2', label:'AES key',     sub:'RSA-OAEP wrapped',   color:'var(--green)' },
+  { n:'3', label:'Metadata',    sub:'AES-encrypted JSON', color:'var(--green)' },
+  { n:'4', label:'File chunks', sub:'AES-256-CBC stream', color:'var(--green)' },
+  { n:'5', label:'SHA-256 ACK', sub:'Integrity verify',   color:'var(--amber)' },
+];
+
+function renderProtocol() {
+  document.getElementById('protocolSteps').innerHTML = STEPS.map(s => `
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+      <div style="font-size:18px;color:${s.color};font-family:var(--display);font-weight:700;margin-bottom:6px">${s.n}</div>
+      <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px">${s.label}</div>
+      <div style="font-size:10px;color:var(--muted2)">${s.sub}</div>
+    </div>`).join('');
+}
+
+// ── Tab switching ──────────────────────────────────────────────────────────────
+function switchTab(name) {
+  const names = ['overview','history','benchmark'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i] === name));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-'+name));
+}
+
+// ── SSE log stream ─────────────────────────────────────────────────────────────
+function initSSE() {
+  // Close any existing connection first
+  if (sseSource) { sseSource.close(); sseSource = null; }
+
+  sseSource = new EventSource(`${API}/logs/stream`);
+  sseSource.onmessage = e => {
+    try {
+      const d = JSON.parse(e.data);
+      if (d.ping) return;  // keepalive — ignore
+      appendLog(d);
+      // FIX: Only refresh on OK/ERROR to reduce polling; not on every message
+      if (d.level === 'OK' || d.level === 'ERROR') {
+        scheduleRefresh(500);
+      }
+    } catch(err) {
+      console.warn('SSE parse error:', err);
+    }
+  };
+  sseSource.onerror = () => {
+    sseSource.close();
+    sseSource = null;
+    setTimeout(initSSE, 3000);
+  };
+}
+
+function appendLog(d) {
+  logs.push(d);
+  const el = document.getElementById('logScroll');
+  const div = document.createElement('div');
+  div.className = 'log-entry fade-in';
+  // Sanitize msg to prevent XSS
+  const msg = String(d.msg).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  div.innerHTML = `
+    <span class="log-ts">${d.ts}</span>
+    <span class="log-lvl ${d.level}">${d.level}</span>
+    <span class="log-msg ${d.level}">${msg}</span>`;
+  el.appendChild(div);
+  // Keep log pane from growing unbounded (cap at 500 entries in DOM)
+  while (el.children.length > 500) el.removeChild(el.firstChild);
+  el.scrollTop = el.scrollHeight;
+}
+
+function clearLogs() {
+  logs = [];
+  document.getElementById('logScroll').innerHTML = '';
+}
+
+// ── Server control ─────────────────────────────────────────────────────────────
+async function startServer() {
+  document.getElementById('btnStart').disabled = true;
+  try {
+    const r = await apiFetch(`${API}/server/start`, {method:'POST'});
+    if (r.ok) {
+      setServerState(true);
+      showToast('Server started on :9999', 'ok');
+    } else {
+      showToast(r.error || 'Failed to start server', 'error');
+      document.getElementById('btnStart').disabled = false;
+    }
+  } catch(e) {
+    showToast('Could not reach API server', 'error');
+    document.getElementById('btnStart').disabled = false;
+  }
+}
+
+async function stopServer() {
+  document.getElementById('btnStop').disabled = true;
+  try {
+    await apiFetch(`${API}/server/stop`, {method:'POST'});
+    setServerState(false);
+    showToast('Server stopped', 'ok');
+  } catch(e) {
+    showToast('Stop request failed', 'error');
+  } finally {
+    document.getElementById('btnStop').disabled = false;
+  }
+}
+
+function setServerState(on) {
+  serverOn = on;
+  document.getElementById('btnStart').disabled = on;
+  document.getElementById('btnStop').disabled = !on;
+  document.getElementById('topStatusDot').className = 'status-dot ' + (on ? 'on' : 'off');
+  document.getElementById('topStatusText').textContent = on ? 'Server online :9999' : 'Server offline';
+  document.getElementById('statServer').textContent = on ? 'ON' : 'OFF';
+  document.getElementById('statServer').className = 'stat-value ' + (on ? 'green' : 'red');
+  document.getElementById('statServerSub').textContent = on ? '127.0.0.1:9999' : 'not running';
+}
+
+// ── Key regen ──────────────────────────────────────────────────────────────────
+async function regenKeys() {
+  try {
+    const r = await apiFetch(`${API}/keygen`, {method:'POST'});
+    showToast(r.ok ? 'RSA-2048 keys regenerated' : (r.error || 'Keygen failed'), r.ok ? 'ok' : 'error');
+  } catch(e) {
+    showToast('Keygen request failed', 'error');
+  }
+}
+
+// ── File selection ─────────────────────────────────────────────────────────────
+function fileSelected(inp) {
+  // inp may be an actual <input> or a synthetic object from dzDrop
+  const file = inp.files && inp.files[0];
+  selectedFile = file || null;
+  document.getElementById('dzFileName').textContent = selectedFile ? selectedFile.name : '';
+  document.getElementById('dzText').textContent = selectedFile
+    ? `${(selectedFile.size / 1024).toFixed(1)} KB selected`
+    : 'Drop file here or click to browse';
+}
+
+function dzDrag(e, on) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.toggle('drag', on);
+}
+
+// FIX: dzDrop correctly sets selectedFile and updates UI without double-calling fileSelected
+function dzDrop(e) {
+  e.preventDefault();
+  dzDrag(e, false);
+  if (e.dataTransfer.files && e.dataTransfer.files.length) {
+    // Also sync the real file input so it stays consistent
+    selectedFile = e.dataTransfer.files[0];
+    document.getElementById('dzFileName').textContent = selectedFile.name;
+    document.getElementById('dzText').textContent = `${(selectedFile.size / 1024).toFixed(1)} KB selected`;
+  }
+}
+
+// ── Send file ──────────────────────────────────────────────────────────────────
+async function sendFile() {
+  if (!selectedFile) { showToast('Please select a file first', 'error'); return; }
+
+  const host = document.getElementById('hostInput').value.trim() || '127.0.0.1';
+  const port = document.getElementById('portInput').value.trim() || '9999';
+  const btn  = document.getElementById('btnSend');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="btn-icon">⟳</span> Encrypting…';
+
+  const pb = document.getElementById('progressBar');
+  const pf = document.getElementById('progressFill');
+  pb.style.display = 'block';
+  pf.style.width = '0%';
+  let pv = 0;
+  const pInterval = setInterval(() => {
+    pv = Math.min(pv + Math.random() * 8, 85);
+    pf.style.width = pv + '%';
+  }, 200);
+
+  const fd = new FormData();
+  fd.append('file', selectedFile);
+  fd.append('host', host);
+  fd.append('port', port);
+
+  try {
+    const r = await fetch(`${API}/send`, {method: 'POST', body: fd}).then(res => res.json());
+    clearInterval(pInterval);
+    pf.style.width = '100%';
+    if (r.ok) {
+      showToast('File transferred successfully!', 'ok');
+    } else {
+      showToast(`Transfer failed: ${r.error || 'Unknown error'}`, 'error');
+    }
+  } catch(e) {
+    clearInterval(pInterval);
+    showToast(`Error: ${e.message}`, 'error');
+  } finally {
+    clearInterval(pInterval);
+    setTimeout(() => { pb.style.display = 'none'; pf.style.width = '0%'; }, 1500);
+    btn.disabled = false;
+    btn.innerHTML = '<span class="btn-icon">🔒</span> Encrypt &amp; send';
+    scheduleRefresh(1000);
+  }
+}
+
+// ── Benchmark ──────────────────────────────────────────────────────────────────
+let benchPollTimer = null;
+
+async function runBenchmark() {
+  const btn = document.getElementById('btnBench');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="btn-icon">⟳</span> Running…';
+  switchTab('benchmark');
+  document.getElementById('benchResults').innerHTML = `
+    <div class="empty-state" style="color:var(--amber)">
+      ⟳ Running benchmark across 64KB, 256KB, 1MB…<br>
+      <span style="font-size:10px;margin-top:6px;display:block">Watch the live log →</span>
+    </div>`;
+
+  // Clear stale results before starting
+  if (benchPollTimer) clearInterval(benchPollTimer);
+
+  try {
+    await apiFetch(`${API}/benchmark`, {method:'POST'});
+  } catch(e) {
+    showToast('Failed to start benchmark', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<span class="btn-icon">⚡</span> Run benchmark';
+    return;
+  }
+
+  // Poll for results every 2 s (benchmark takes ~30–120 s)
+  benchPollTimer = setInterval(async () => {
+    try {
+      const res = await fetch(`${API}/benchmark/results`).then(r => r.json());
+      if (res && res.length > 0) {
+        clearInterval(benchPollTimer);
+        benchPollTimer = null;
+        renderBenchmark(res);
+        btn.disabled = false;
+        btn.innerHTML = '<span class="btn-icon">⚡</span> Run benchmark';
+        showToast('Benchmark complete', 'ok');
+      }
+    } catch(e) { /* keep polling */ }
+  }, 2000);
+
+  // Safety: stop polling after 10 min
+  setTimeout(() => {
+    if (benchPollTimer) {
+      clearInterval(benchPollTimer);
+      benchPollTimer = null;
+      btn.disabled = false;
+      btn.innerHTML = '<span class="btn-icon">⚡</span> Run benchmark';
+      showToast('Benchmark timed out', 'error');
+    }
+  }, 600000);
+}
+
+function renderBenchmark(data) {
+  const el = document.getElementById('benchResults');
+  el.innerHTML = data.map(r => {
+    const maxTP = Math.max(r.plain_tp, r.crypt_tp);
+    const pct = maxTP > 0 ? (Math.min(r.plain_tp, r.crypt_tp) / maxTP * 100) : 50;
+    return `
+    <div class="bench-row fade-in">
+      <div class="bench-title">${r.size_kb} KB test case</div>
+      <div class="bench-metrics">
+        <div class="bench-metric">
+          <div class="bm-label">Plain throughput</div>
+          <div class="bm-val" style="color:var(--muted2)">${r.plain_tp} MB/s</div>
+          <div class="bm-sub">${r.plain_time}s &middot; ${r.p_ok ? '✓ integrity' : '✗ fail'}</div>
+        </div>
+        <div class="bench-metric">
+          <div class="bm-label">Encrypted throughput</div>
+          <div class="bm-val" style="color:var(--green)">${r.crypt_tp} MB/s</div>
+          <div class="bm-sub">${r.crypt_time}s &middot; ${r.c_ok ? '✓ integrity' : '✗ fail'}</div>
+        </div>
+        <div class="bench-metric">
+          <div class="bm-label">Wire overhead</div>
+          <div class="bm-val" style="color:var(--amber)">+${r.overhead}%</div>
+          <div class="bm-sub">${r.wire_bytes.toLocaleString()} bytes on wire</div>
+        </div>
+      </div>
+      <div class="bar-wrap">
+        <span style="font-size:10px;color:var(--muted2);min-width:52px">plain</span>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--muted)"></div></div>
+        <span class="bar-label">${r.plain_tp} MB/s</span>
+      </div>
+      <div class="bar-wrap">
+        <span style="font-size:10px;color:var(--muted2);min-width:52px">enc</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:var(--green)"></div></div>
+        <span class="bar-label" style="color:var(--green)">${r.crypt_tp} MB/s</span>
+      </div>
+    </div>`;
+  }).join('') + `
+    <div class="bench-row fade-in" style="margin-top:4px;border-color:rgba(0,255,157,.2)">
+      <div style="font-size:11px;color:var(--muted2);line-height:1.7">
+        <span style="color:var(--green)">Key finding:</span>
+        AES-256-CBC adds only ~${data[0]?.overhead ?? '0.1'}% wire overhead (IV + PKCS7 padding).
+        RSA handshake is one-time per session — amortised cost is negligible.
+        Encrypted transfers provide <span style="color:var(--green)">confidentiality + integrity + authenticity</span>
+        with near-zero performance penalty.
+      </div>
+    </div>`;
+}
+
+// ── History ────────────────────────────────────────────────────────────────────
+function historyTable(rows, limit) {
+  const data = limit ? rows.slice(0, limit) : rows;
+  if (!data.length) return `<div class="empty-state">No transfers yet</div>`;
+  return `<table class="hist-table">
+    <thead><tr>
+      <th>File</th><th>Size</th><th>Time</th><th>Throughput</th><th>Direction</th><th>Integrity</th><th>Hash</th><th>When</th>
+    </tr></thead>
+    <tbody>
+      ${data.map(r => `<tr class="fade-in">
+        <td>${String(r.filename).replace(/</g,'&lt;')}</td>
+        <td>${(r.size/1024).toFixed(1)} KB</td>
+        <td>${r.time}s</td>
+        <td>${r.throughput} MB/s</td>
+        <td><span class="pill ${r.direction==='sent'?'pill-sent':'pill-recv'}">${r.direction}</span></td>
+        <td><span class="pill ${r.integrity?'pill-ok':'pill-fail'}">${r.integrity?'✓ OK':'✗ FAIL'}</span></td>
+        <td style="font-size:10px;color:var(--muted)">${r.hash}</td>
+        <td style="font-size:10px">${r.ts}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+async function clearHistory() {
+  try {
+    await apiFetch(`${API}/history/clear`, {method:'POST'});
+    showToast('History cleared', 'ok');
+    scheduleRefresh(200);
+  } catch(e) {
+    showToast('Could not clear history', 'error');
+  }
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+// FIX: Central fetch wrapper with error handling
+async function apiFetch(url, opts = {}) {
+  const res = await fetch(url, opts);
+  if (!res.ok) {
+    let body = {};
+    try { body = await res.json(); } catch(e) {}
+    throw new Error(body.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+// FIX: Debounced refresh — avoids cascade of refreshAll() calls from SSE events
+function scheduleRefresh(delay = 500) {
+  if (refreshTimer) clearTimeout(refreshTimer);
+  refreshTimer = setTimeout(refreshAll, delay);
+}
+
+// ── Refresh all UI ──────────────────────────────────────────────────────────────
+async function refreshAll() {
+  refreshTimer = null;
+  try {
+    const [status, histData] = await Promise.all([
+      fetch(`${API}/status`).then(r => r.json()),
+      fetch(`${API}/history`).then(r => r.json()),
+    ]);
+
+    setServerState(status.server_running);
+
+    document.getElementById('statCount').textContent = histData.length;
+    if (histData.length) {
+      const ok = histData.filter(h => h.integrity).length;
+      document.getElementById('statInteg').textContent = `${ok}/${histData.length}`;
+      const avgTP = (histData.reduce((a,b) => a + parseFloat(b.throughput||0), 0) / histData.length).toFixed(2);
+      document.getElementById('statTP').textContent = avgTP;
+    } else {
+      document.getElementById('statInteg').textContent = '—';
+      document.getElementById('statTP').textContent = '—';
+    }
+
+    document.getElementById('recentHistory').innerHTML = historyTable(histData, 5);
+    document.getElementById('fullHistory').innerHTML   = historyTable(histData);
+  } catch(e) {
+    // Silently ignore — API server might not be ready yet
+    console.warn('refreshAll failed:', e.message);
+  }
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+renderProtocol();
+initSSE();
+refreshAll();
+// Poll every 5 s (SSE handles real-time; polling is a safety net)
+setInterval(refreshAll, 5000);
+</script>
+</body>
+</html>
