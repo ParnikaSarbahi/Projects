@@ -1,0 +1,242 @@
+===== JOB INFO =====
+Node : gpu01
+Date : Sun May  3 11:25:09 PM IST 2026
+NVIDIA H100 80GB HBM3, 81559 MiB
+NVIDIA H100 80GB HBM3, 81559 MiB
+NVIDIA H100 80GB HBM3, 81559 MiB
+NVIDIA H100 80GB HBM3, 81559 MiB
+NVIDIA H100 80GB HBM3, 81559 MiB
+NVIDIA H100 80GB HBM3, 81559 MiB
+NVIDIA H100 80GB HBM3, 81559 MiB
+NVIDIA H100 80GB HBM3, 81559 MiB
+PyTorch : 2.6.0+cu124
+GPU : NVIDIA H100 80GB HBM3
+===== STARTING V2 TRAINING =====
+Using device: cuda
+GPU: NVIDIA H100 80GB HBM3
+
+===== PIPELINE SANITY CHECK =====
+DWT  round-trip PSNR: 150.8 dB  OK
+DCT  round-trip PSNR: 149.8 dB  OK
+Grad flows: True  OK
+All checks passed.
+
+Total parameters: 2,674,099
+Embedder max_delta: 5.0
+Cover: 25000 | Train: 20000 | Batches/ep: 2500
+=================================================================
+JOINT TRAINING V2: 100 epochs
+Improvements: HVS masking | U-Net decoder | NC loss | warmup LR
+CR/RS/PI removed (Nyquist argument)
+=================================================================
+Ep 001 [clean/mild] | img=0.00011 wm=0.3840 sig=0.0002 | PSNR=39.76 BER=0.1285 SSIM=0.986468 NC=0.9479 | LR=4.00e-05
+  PSNR=39.76 < 45 dB, skipping save
+Ep 002 [clean/mild] | img=0.00013 wm=0.3576 sig=0.0000 | PSNR=38.91 BER=0.0831 SSIM=0.980735 NC=0.9707 | LR=6.00e-05
+  PSNR=38.91 < 45 dB, skipping save
+Ep 003 [clean/mild] | img=0.00015 wm=0.3495 sig=0.0000 | PSNR=38.48 BER=0.0709 SSIM=0.975357 NC=0.9777 | LR=8.00e-05
+  PSNR=38.48 < 45 dB, skipping save
+Ep 004 [clean/mild] | img=0.00015 wm=0.3459 sig=0.0000 | PSNR=38.29 BER=0.0641 SSIM=0.973007 NC=0.9812 | LR=1.00e-04
+  PSNR=38.29 < 45 dB, skipping save
+Ep 005 [clean/mild] | img=0.00015 wm=0.3436 sig=0.0000 | PSNR=38.27 BER=0.0594 SSIM=0.972274 NC=0.9837 | LR=1.00e-04
+  PSNR=38.27 < 45 dB, skipping save
+Ep 006 [clean/mild] | img=0.00015 wm=0.3412 sig=0.0000 | PSNR=38.38 BER=0.0544 SSIM=0.972775 NC=0.9860 | LR=1.00e-04
+  PSNR=38.38 < 45 dB, skipping save
+Ep 007 [clean/mild] | img=0.00014 wm=0.3394 sig=0.0000 | PSNR=38.66 BER=0.0512 SSIM=0.974373 NC=0.9878 | LR=9.99e-05
+  PSNR=38.66 < 45 dB, skipping save
+Ep 008 [clean/mild] | img=0.00013 wm=0.3381 sig=0.0000 | PSNR=39.07 BER=0.0484 SSIM=0.977029 NC=0.9892 | LR=9.98e-05
+  PSNR=39.07 < 45 dB, skipping save
+Ep 009 [clean/mild] | img=0.00012 wm=0.3371 sig=0.0000 | PSNR=39.52 BER=0.0465 SSIM=0.980632 NC=0.9904 | LR=9.96e-05
+  PSNR=39.52 < 45 dB, skipping save
+Ep 010 [clean/mild] | img=0.00010 wm=0.3358 sig=0.0000 | PSNR=40.03 BER=0.0446 SSIM=0.984743 NC=0.9916 | LR=9.93e-05
+  Signal check: delta_mean=1.6995  SNR=0.0629  OK
+  PSNR=40.03 < 45 dB, skipping save
+Ep 011 [clean/mild] | img=0.00010 wm=0.3344 sig=0.0000 | PSNR=40.28 BER=0.0420 SSIM=0.988490 NC=0.9929 | LR=9.90e-05
+  PSNR=40.28 < 45 dB, skipping save
+Ep 012 [clean/mild] | img=0.00009 wm=0.3332 sig=0.0000 | PSNR=40.64 BER=0.0399 SSIM=0.991016 NC=0.9942 | LR=9.87e-05
+  PSNR=40.64 < 45 dB, skipping save
+Ep 013 [clean/mild] | img=0.00008 wm=0.3324 sig=0.0000 | PSNR=40.80 BER=0.0381 SSIM=0.992151 NC=0.9951 | LR=9.83e-05
+  PSNR=40.80 < 45 dB, skipping save
+Ep 014 [clean/mild] | img=0.00008 wm=0.3315 sig=0.0000 | PSNR=41.08 BER=0.0362 SSIM=0.993035 NC=0.9959 | LR=9.78e-05
+  PSNR=41.08 < 45 dB, skipping save
+Ep 015 [clean/mild] | img=0.00008 wm=0.3308 sig=0.0000 | PSNR=41.17 BER=0.0352 SSIM=0.993444 NC=0.9964 | LR=9.73e-05
+  PSNR=41.17 < 45 dB, skipping save
+Ep 016 [medium    ] | img=0.00010 wm=0.3449 sig=0.0000 | PSNR=39.98 BER=0.0633 SSIM=0.991615 NC=0.9828 | LR=9.67e-05
+  PSNR=39.98 < 45 dB, skipping save
+Ep 017 [medium    ] | img=0.00009 wm=0.3340 sig=0.0000 | PSNR=40.44 BER=0.0406 SSIM=0.992436 NC=0.9938 | LR=9.61e-05
+  PSNR=40.44 < 45 dB, skipping save
+Ep 018 [medium    ] | img=0.00008 wm=0.3321 sig=0.0000 | PSNR=40.79 BER=0.0374 SSIM=0.993055 NC=0.9955 | LR=9.55e-05
+  PSNR=40.79 < 45 dB, skipping save
+Ep 019 [medium    ] | img=0.00008 wm=0.3311 sig=0.0000 | PSNR=41.05 BER=0.0360 SSIM=0.993518 NC=0.9962 | LR=9.47e-05
+  PSNR=41.05 < 45 dB, skipping save
+Ep 020 [medium    ] | img=0.00008 wm=0.3305 sig=0.0000 | PSNR=41.31 BER=0.0347 SSIM=0.993936 NC=0.9969 | LR=9.40e-05
+  Signal check: delta_mean=1.4570  SNR=0.0540  OK
+  PSNR=41.31 < 45 dB, skipping save
+Ep 021 [medium    ] | img=0.00006 wm=0.3305 sig=0.0000 | PSNR=42.25 BER=0.0343 SSIM=0.995146 NC=0.9967 | LR=9.32e-05
+  PSNR=42.25 < 45 dB, skipping save
+Ep 022 [medium    ] | img=0.00006 wm=0.3305 sig=0.0000 | PSNR=42.52 BER=0.0346 SSIM=0.995546 NC=0.9967 | LR=9.23e-05
+  PSNR=42.52 < 45 dB, skipping save
+Ep 023 [medium    ] | img=0.00005 wm=0.3305 sig=0.0000 | PSNR=42.94 BER=0.0341 SSIM=0.995963 NC=0.9968 | LR=9.14e-05
+  PSNR=42.94 < 45 dB, skipping save
+Ep 024 [medium    ] | img=0.00005 wm=0.3302 sig=0.0000 | PSNR=43.31 BER=0.0337 SSIM=0.996335 NC=0.9970 | LR=9.05e-05
+  PSNR=43.31 < 45 dB, skipping save
+Ep 025 [medium    ] | img=0.00005 wm=0.3301 sig=0.0000 | PSNR=43.49 BER=0.0332 SSIM=0.996398 NC=0.9970 | LR=8.95e-05
+  PSNR=43.49 < 45 dB, skipping save
+Ep 026 [medium    ] | img=0.00004 wm=0.3298 sig=0.0000 | PSNR=43.89 BER=0.0326 SSIM=0.996713 NC=0.9973 | LR=8.84e-05
+  PSNR=43.89 < 45 dB, skipping save
+Ep 027 [medium    ] | img=0.00004 wm=0.3298 sig=0.0000 | PSNR=44.23 BER=0.0325 SSIM=0.996950 NC=0.9974 | LR=8.73e-05
+  PSNR=44.23 < 45 dB, skipping save
+Ep 028 [medium    ] | img=0.00004 wm=0.3297 sig=0.0000 | PSNR=44.25 BER=0.0321 SSIM=0.996983 NC=0.9974 | LR=8.62e-05
+  PSNR=44.25 < 45 dB, skipping save
+Ep 029 [medium    ] | img=0.00004 wm=0.3294 sig=0.0000 | PSNR=44.47 BER=0.0313 SSIM=0.997127 NC=0.9977 | LR=8.51e-05
+  PSNR=44.47 < 45 dB, skipping save
+Ep 030 [medium    ] | img=0.00004 wm=0.3294 sig=0.0000 | PSNR=44.62 BER=0.0313 SSIM=0.997173 NC=0.9977 | LR=8.39e-05
+  Signal check: delta_mean=1.5348  SNR=0.0568  OK
+  PSNR=44.62 < 45 dB, skipping save
+Ep 031 [medium    ] | img=0.00004 wm=0.3295 sig=0.0000 | PSNR=44.62 BER=0.0313 SSIM=0.997208 NC=0.9977 | LR=8.26e-05
+  PSNR=44.62 < 45 dB, skipping save
+Ep 032 [medium    ] | img=0.00003 wm=0.3293 sig=0.0000 | PSNR=44.83 BER=0.0309 SSIM=0.997321 NC=0.9978 | LR=8.14e-05
+  PSNR=44.83 < 45 dB, skipping save
+Ep 033 [medium    ] | img=0.00003 wm=0.3290 sig=0.0000 | PSNR=45.08 BER=0.0301 SSIM=0.997462 NC=0.9981 | LR=8.01e-05
+  Best saved  PSNR=45.08  BER=0.0301  NC=0.9981
+Ep 034 [medium    ] | img=0.00003 wm=0.3291 sig=0.0000 | PSNR=45.18 BER=0.0302 SSIM=0.997516 NC=0.9981 | LR=7.87e-05
+  Best saved  PSNR=45.18  BER=0.0302  NC=0.9981
+Ep 035 [medium    ] | img=0.00003 wm=0.3291 sig=0.0000 | PSNR=45.27 BER=0.0300 SSIM=0.997591 NC=0.9980 | LR=7.73e-05
+  Best saved  PSNR=45.27  BER=0.0300  NC=0.9980
+Ep 036 [full      ] | img=0.00003 wm=0.3291 sig=0.0000 | PSNR=45.15 BER=0.0300 SSIM=0.997489 NC=0.9980 | LR=7.59e-05
+Ep 037 [full      ] | img=0.00003 wm=0.3289 sig=0.0000 | PSNR=45.50 BER=0.0295 SSIM=0.997653 NC=0.9982 | LR=7.45e-05
+  Best saved  PSNR=45.50  BER=0.0295  NC=0.9982
+Ep 038 [full      ] | img=0.00003 wm=0.3291 sig=0.0000 | PSNR=45.43 BER=0.0297 SSIM=0.997575 NC=0.9981 | LR=7.31e-05
+Ep 039 [full      ] | img=0.00003 wm=0.3289 sig=0.0000 | PSNR=45.78 BER=0.0291 SSIM=0.997823 NC=0.9983 | LR=7.16e-05
+  Best saved  PSNR=45.78  BER=0.0291  NC=0.9983
+Ep 040 [full      ] | img=0.00003 wm=0.3289 sig=0.0000 | PSNR=45.54 BER=0.0293 SSIM=0.997698 NC=0.9981 | LR=7.01e-05
+  Signal check: delta_mean=1.5293  SNR=0.0566  OK
+Ep 041 [full      ] | img=0.00003 wm=0.3289 sig=0.0000 | PSNR=45.60 BER=0.0288 SSIM=0.997692 NC=0.9982 | LR=6.86e-05
+Ep 042 [full      ] | img=0.00003 wm=0.3287 sig=0.0000 | PSNR=45.77 BER=0.0285 SSIM=0.997770 NC=0.9984 | LR=6.70e-05
+  Best saved  PSNR=45.77  BER=0.0285  NC=0.9984
+Ep 043 [full      ] | img=0.00003 wm=0.3289 sig=0.0000 | PSNR=45.85 BER=0.0286 SSIM=0.997849 NC=0.9983 | LR=6.55e-05
+  Best saved  PSNR=45.85  BER=0.0286  NC=0.9983
+Ep 044 [full      ] | img=0.00003 wm=0.3286 sig=0.0000 | PSNR=45.80 BER=0.0282 SSIM=0.997806 NC=0.9985 | LR=6.39e-05
+  Best saved  PSNR=45.80  BER=0.0282  NC=0.9985
+Ep 045 [full      ] | img=0.00003 wm=0.3285 sig=0.0000 | PSNR=46.12 BER=0.0281 SSIM=0.997996 NC=0.9985 | LR=6.23e-05
+  Best saved  PSNR=46.12  BER=0.0281  NC=0.9985
+Ep 046 [full      ] | img=0.00003 wm=0.3287 sig=0.0000 | PSNR=46.14 BER=0.0279 SSIM=0.997993 NC=0.9985 | LR=6.07e-05
+  Best saved  PSNR=46.14  BER=0.0279  NC=0.9985
+Ep 047 [full      ] | img=0.00002 wm=0.3286 sig=0.0000 | PSNR=46.16 BER=0.0278 SSIM=0.998024 NC=0.9985 | LR=5.90e-05
+  Best saved  PSNR=46.16  BER=0.0278  NC=0.9985
+Ep 048 [full      ] | img=0.00002 wm=0.3286 sig=0.0000 | PSNR=46.19 BER=0.0276 SSIM=0.998059 NC=0.9986 | LR=5.74e-05
+  Best saved  PSNR=46.19  BER=0.0276  NC=0.9986
+Ep 049 [full      ] | img=0.00002 wm=0.3285 sig=0.0000 | PSNR=46.21 BER=0.0277 SSIM=0.998019 NC=0.9985 | LR=5.58e-05
+  Best saved  PSNR=46.21  BER=0.0277  NC=0.9985
+Ep 050 [full      ] | img=0.00002 wm=0.3284 sig=0.0000 | PSNR=46.25 BER=0.0273 SSIM=0.998060 NC=0.9986 | LR=5.41e-05
+  Signal check: delta_mean=1.5255  SNR=0.0565  OK
+  Best saved  PSNR=46.25  BER=0.0273  NC=0.9986
+Ep 051 [full      ] | img=0.00002 wm=0.3289 sig=0.0000 | PSNR=46.77 BER=0.0285 SSIM=0.998308 NC=0.9982 | LR=5.25e-05
+  Best saved  PSNR=46.77  BER=0.0285  NC=0.9982
+Ep 052 [full      ] | img=0.00002 wm=0.3290 sig=0.0000 | PSNR=46.86 BER=0.0281 SSIM=0.998367 NC=0.9982 | LR=5.08e-05
+  Best saved  PSNR=46.86  BER=0.0281  NC=0.9982
+Ep 053 [full      ] | img=0.00002 wm=0.3289 sig=0.0000 | PSNR=47.04 BER=0.0279 SSIM=0.998430 NC=0.9982 | LR=4.92e-05
+  Best saved  PSNR=47.04  BER=0.0279  NC=0.9982
+Ep 054 [full      ] | img=0.00002 wm=0.3288 sig=0.0000 | PSNR=47.06 BER=0.0281 SSIM=0.998416 NC=0.9983 | LR=4.75e-05
+  Best saved  PSNR=47.06  BER=0.0281  NC=0.9983
+Ep 055 [full      ] | img=0.00002 wm=0.3289 sig=0.0000 | PSNR=47.06 BER=0.0280 SSIM=0.998405 NC=0.9981 | LR=4.59e-05
+  Best saved  PSNR=47.06  BER=0.0280  NC=0.9981
+Ep 056 [full      ] | img=0.00002 wm=0.3289 sig=0.0000 | PSNR=46.95 BER=0.0280 SSIM=0.998414 NC=0.9981 | LR=4.42e-05
+Ep 057 [full      ] | img=0.00002 wm=0.3286 sig=0.0000 | PSNR=47.15 BER=0.0274 SSIM=0.998511 NC=0.9984 | LR=4.26e-05
+  Best saved  PSNR=47.15  BER=0.0274  NC=0.9984
+Ep 058 [full      ] | img=0.00002 wm=0.3288 sig=0.0000 | PSNR=47.30 BER=0.0275 SSIM=0.998511 NC=0.9984 | LR=4.10e-05
+  Best saved  PSNR=47.30  BER=0.0275  NC=0.9984
+Ep 059 [full      ] | img=0.00002 wm=0.3287 sig=0.0000 | PSNR=47.31 BER=0.0273 SSIM=0.998490 NC=0.9984 | LR=3.93e-05
+  Best saved  PSNR=47.31  BER=0.0273  NC=0.9984
+Ep 060 [full      ] | img=0.00002 wm=0.3285 sig=0.0000 | PSNR=47.39 BER=0.0273 SSIM=0.998552 NC=0.9985 | LR=3.77e-05
+  Signal check: delta_mean=1.5522  SNR=0.0575  OK
+  Best saved  PSNR=47.39  BER=0.0273  NC=0.9985
+Ep 061 [full      ] | img=0.00002 wm=0.3287 sig=0.0000 | PSNR=47.23 BER=0.0273 SSIM=0.998462 NC=0.9983 | LR=3.61e-05
+Ep 062 [full      ] | img=0.00002 wm=0.3285 sig=0.0000 | PSNR=47.43 BER=0.0269 SSIM=0.998573 NC=0.9986 | LR=3.45e-05
+  Best saved  PSNR=47.43  BER=0.0269  NC=0.9986
+Ep 063 [full      ] | img=0.00002 wm=0.3286 sig=0.0000 | PSNR=47.47 BER=0.0270 SSIM=0.998597 NC=0.9985 | LR=3.30e-05
+  Best saved  PSNR=47.47  BER=0.0270  NC=0.9985
+Ep 064 [full      ] | img=0.00002 wm=0.3284 sig=0.0000 | PSNR=47.43 BER=0.0268 SSIM=0.998579 NC=0.9985 | LR=3.14e-05
+Ep 065 [full      ] | img=0.00002 wm=0.3285 sig=0.0000 | PSNR=47.47 BER=0.0271 SSIM=0.998594 NC=0.9985 | LR=2.99e-05
+Ep 066 [full      ] | img=0.00002 wm=0.3284 sig=0.0000 | PSNR=47.63 BER=0.0265 SSIM=0.998676 NC=0.9987 | LR=2.84e-05
+  Best saved  PSNR=47.63  BER=0.0265  NC=0.9987
+Ep 067 [full      ] | img=0.00002 wm=0.3285 sig=0.0000 | PSNR=47.54 BER=0.0267 SSIM=0.998643 NC=0.9985 | LR=2.69e-05
+Ep 068 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=47.51 BER=0.0264 SSIM=0.998650 NC=0.9988 | LR=2.55e-05
+Ep 069 [full      ] | img=0.00002 wm=0.3286 sig=0.0000 | PSNR=47.73 BER=0.0264 SSIM=0.998702 NC=0.9985 | LR=2.41e-05
+  Best saved  PSNR=47.73  BER=0.0264  NC=0.9985
+Ep 070 [full      ] | img=0.00002 wm=0.3284 sig=0.0000 | PSNR=47.71 BER=0.0262 SSIM=0.998714 NC=0.9986 | LR=2.27e-05
+  Signal check: delta_mean=1.4551  SNR=0.0539  OK
+Ep 071 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=47.71 BER=0.0260 SSIM=0.998720 NC=0.9987 | LR=2.13e-05
+  Best saved  PSNR=47.71  BER=0.0260  NC=0.9987
+Ep 072 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=47.69 BER=0.0261 SSIM=0.998680 NC=0.9986 | LR=1.99e-05
+Ep 073 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=47.75 BER=0.0261 SSIM=0.998718 NC=0.9987 | LR=1.86e-05
+  Best saved  PSNR=47.75  BER=0.0261  NC=0.9987
+Ep 074 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=47.69 BER=0.0260 SSIM=0.998702 NC=0.9987 | LR=1.74e-05
+Ep 075 [full      ] | img=0.00002 wm=0.3284 sig=0.0000 | PSNR=47.78 BER=0.0261 SSIM=0.998737 NC=0.9987 | LR=1.61e-05
+  Best saved  PSNR=47.78  BER=0.0261  NC=0.9987
+Ep 076 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=47.88 BER=0.0258 SSIM=0.998755 NC=0.9988 | LR=1.49e-05
+  Best saved  PSNR=47.88  BER=0.0258  NC=0.9988
+Ep 077 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=47.90 BER=0.0258 SSIM=0.998787 NC=0.9987 | LR=1.38e-05
+  Best saved  PSNR=47.90  BER=0.0258  NC=0.9987
+Ep 078 [full      ] | img=0.00002 wm=0.3285 sig=0.0000 | PSNR=47.89 BER=0.0261 SSIM=0.998797 NC=0.9986 | LR=1.27e-05
+Ep 079 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=47.88 BER=0.0258 SSIM=0.998782 NC=0.9987 | LR=1.16e-05
+Ep 080 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=47.86 BER=0.0261 SSIM=0.998763 NC=0.9985 | LR=1.05e-05
+  Signal check: delta_mean=1.4293  SNR=0.0529  OK
+Ep 081 [full      ] | img=0.00002 wm=0.3284 sig=0.0000 | PSNR=47.91 BER=0.0257 SSIM=0.998774 NC=0.9986 | LR=9.55e-06
+  Best saved  PSNR=47.91  BER=0.0257  NC=0.9986
+Ep 082 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=48.00 BER=0.0255 SSIM=0.998826 NC=0.9988 | LR=8.60e-06
+  Best saved  PSNR=48.00  BER=0.0255  NC=0.9988
+Ep 083 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=47.97 BER=0.0255 SSIM=0.998801 NC=0.9988 | LR=7.70e-06
+Ep 084 [full      ] | img=0.00002 wm=0.3280 sig=0.0000 | PSNR=48.04 BER=0.0253 SSIM=0.998851 NC=0.9990 | LR=6.84e-06
+  Best saved  PSNR=48.04  BER=0.0253  NC=0.9990
+Ep 085 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=48.10 BER=0.0258 SSIM=0.998879 NC=0.9987 | LR=6.03e-06
+  Best saved  PSNR=48.10  BER=0.0258  NC=0.9987
+Ep 086 [full      ] | img=0.00002 wm=0.3284 sig=0.0000 | PSNR=48.00 BER=0.0255 SSIM=0.998829 NC=0.9987 | LR=5.26e-06
+Ep 087 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=48.02 BER=0.0253 SSIM=0.998837 NC=0.9987 | LR=4.55e-06
+Ep 088 [full      ] | img=0.00002 wm=0.3281 sig=0.0000 | PSNR=48.14 BER=0.0255 SSIM=0.998883 NC=0.9988 | LR=3.89e-06
+  Best saved  PSNR=48.14  BER=0.0255  NC=0.9988
+Ep 089 [full      ] | img=0.00002 wm=0.3280 sig=0.0000 | PSNR=48.18 BER=0.0251 SSIM=0.998900 NC=0.9989 | LR=3.27e-06
+  Best saved  PSNR=48.18  BER=0.0251  NC=0.9989
+Ep 090 [full      ] | img=0.00002 wm=0.3280 sig=0.0000 | PSNR=48.22 BER=0.0250 SSIM=0.998911 NC=0.9990 | LR=2.71e-06
+  Signal check: delta_mean=1.3828  SNR=0.0512  OK
+  Best saved  PSNR=48.22  BER=0.0250  NC=0.9990
+Ep 091 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=48.21 BER=0.0253 SSIM=0.998916 NC=0.9988 | LR=2.20e-06
+Ep 092 [full      ] | img=0.00002 wm=0.3284 sig=0.0000 | PSNR=48.18 BER=0.0254 SSIM=0.998897 NC=0.9987 | LR=1.74e-06
+Ep 093 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=48.14 BER=0.0252 SSIM=0.998878 NC=0.9988 | LR=1.33e-06
+Ep 094 [full      ] | img=0.00002 wm=0.3281 sig=0.0000 | PSNR=48.16 BER=0.0253 SSIM=0.998890 NC=0.9989 | LR=9.81e-07
+Ep 095 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=48.16 BER=0.0254 SSIM=0.998896 NC=0.9988 | LR=6.82e-07
+  No improvement (5/20)
+Ep 096 [full      ] | img=0.00002 wm=0.3282 sig=0.0000 | PSNR=48.22 BER=0.0253 SSIM=0.998917 NC=0.9988 | LR=4.37e-07
+Ep 097 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=48.23 BER=0.0255 SSIM=0.998918 NC=0.9986 | LR=2.46e-07
+Ep 098 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=48.20 BER=0.0253 SSIM=0.998906 NC=0.9987 | LR=1.09e-07
+Ep 099 [full      ] | img=0.00002 wm=0.3281 sig=0.0000 | PSNR=48.20 BER=0.0251 SSIM=0.998905 NC=0.9989 | LR=2.73e-08
+Ep 100 [full      ] | img=0.00002 wm=0.3283 sig=0.0000 | PSNR=48.20 BER=0.0255 SSIM=0.998907 NC=0.9987 | LR=0.00e+00
+  Signal check: delta_mean=1.3573  SNR=0.0503  OK
+  No improvement (10/20)
+
+Done. Best score=-0.0072
+===== TRAINING DONE: Mon May  4 05:44:32 AM IST 2026 =====
+Running test.py...
+Using device: cuda
+Loaded: models/final_model_v2.pth  epoch=100  PSNR=48.20  BER=0.0255  NC=0.9987
+
+========== TEST RESULTS ==========
+PSNR: 48.30 dB | BER: 0.0239 | SSIM: 0.998905 | NC: 0.9988
+
+========== PER-ATTACK RESULTS (12 attacks, CR/RS/PI excluded) ==========
+Attack       PSNR      BER         SSIM       NC
+--------------------------------------------------
+NO          48.30   0.0221     0.998905   0.9996
+GN          48.30   0.0221     0.998905   0.9996
+SP          48.30   0.0301     0.998905   0.9960
+MF          48.30   0.0243     0.998905   0.9989
+GF          48.30   0.0224     0.998905   0.9995
+MD          48.30   0.0224     0.998905   0.9995
+RO          48.30   0.0237     0.998905   0.9995
+FR          48.30   0.0222     0.998905   0.9995
+FC          48.30   0.0223     0.998905   0.9995
+RCD         48.30   0.0289     0.998905   0.9956
+MB          48.30   0.0224     0.998905   0.9995
+JPEG        48.30   0.0221     0.998905   0.9996
+
+All results saved to results/
+===== ALL DONE: Mon May  4 06:05:50 AM IST 2026 =====
