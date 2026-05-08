@@ -74,15 +74,15 @@ ForensicAnalyzer (Interface)
 Java-Based Network Scanning and Forensics Tool/
 ├── src/main/java/forensics/
 │   ├── Main.java                    Enhanced menu with all features
-│   ├── Logger.java                  Professional logging (Feature #2)
-│   ├── Config.java                  Configuration reader (Feature #3)
-│   ├── Database.java                MySQL operations (Feature #4)
-│   ├── Validator.java               Input validation (Feature #9)
-│   ├── DnsScanner.java              DNS reconnaissance (Feature #6)
-│   ├── CertificateAnalyzer.java     SSL/TLS analysis (Feature #7)
-│   ├── AuthenticationTester.java    Auth testing (Feature #8)
-│   ├── SimpleTest.java              Unit tests (Feature #1)
-│   ├── Port_Scanner.java            Enhanced port scanner (Feature #5)
+│   ├── Logger.java                  Professional logging 
+│   ├── Config.java                  Configuration reader 
+│   ├── Database.java                MySQL operations 
+│   ├── Validator.java               Input validation 
+│   ├── DnsScanner.java              DNS reconnaissance
+│   ├── CertificateAnalyzer.java     SSL/TLS analysis 
+│   ├── AuthenticationTester.java    Auth testing 
+│   ├── SimpleTest.java              Unit tests 
+│   ├── Port_Scanner.java            Enhanced port scanner
 │   ├── WebVulnerabilityScanner.java Web scanning
 │   ├── LogAnalyzer.java             Log analysis
 │   ├── MetadataExtractor.java       Image metadata
