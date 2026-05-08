@@ -36,18 +36,18 @@
 
 ## 🎯 Feature Matrix
 
-| # | Feature | File | Type | Status |
-|---|---------|------|------|--------|
-| 1 | Unit Testing | SimpleTest.java | Testing | ✅ Complete |
-| 2 | Logging System | Logger.java | Infrastructure | ✅ Complete |
-| 3 | Configuration | Config.java | Infrastructure | ✅ Complete |
-| 4 | MySQL Database | Database.java | Persistence | ✅ Complete |
-| 5 | Port Scanner (Enhanced) | Port_Scanner.java | Scanning | ✅ Complete |
-| 6 | DNS Reconnaissance | DnsScanner.java | Scanning | ✅ Complete |
-| 7 | Certificate Analysis | CertificateAnalyzer.java | Scanning | ✅ Complete |
-| 8 | Authentication Testing | AuthenticationTester.java | Scanning | ✅ Complete |
-| 9 | Input Validation | Validator.java | Security | ✅ Complete |
-| 10 | Enhanced Menu | Main.java | UI | ✅ Complete |
+| # | Feature | File | Type |
+|---|---------|------|------|
+| 1 | Unit Testing | SimpleTest.java | Testing | 
+| 2 | Logging System | Logger.java | Infrastructure |
+| 3 | Configuration | Config.java | Infrastructure | 
+| 4 | MySQL Database | Database.java | Persistence |
+| 5 | Port Scanner (Enhanced) | Port_Scanner.java | Scanning | 
+| 6 | DNS Reconnaissance | DnsScanner.java | Scanning |
+| 7 | Certificate Analysis | CertificateAnalyzer.java | Scanning |
+| 8 | Authentication Testing | AuthenticationTester.java | Scanning |
+| 9 | Input Validation | Validator.java | Security |
+| 10 | Enhanced Menu | Main.java | UI | 
 
 ---
 
@@ -219,22 +219,6 @@ CREATE TABLE scan_results (
 );
 ```
 
-### **Useful Queries:**
-```sql
--- View all scans
-SELECT * FROM scan_results ORDER BY created_at DESC;
-
--- View specific scan type
-SELECT * FROM scan_results WHERE scan_type = 'PORT_SCAN';
-
--- View failed scans
-SELECT * FROM scan_results WHERE status = 'FAILED';
-
--- Get statistics
-SELECT scan_type, COUNT(*) as count, AVG(execution_time_ms) as avg_time
-FROM scan_results GROUP BY scan_type;
-```
-
 ---
 
 ## 🔧 Configuration Reference
@@ -260,58 +244,6 @@ app.name=JScanSec
 app.version=2.0.0
 ```
 
----
-
-## 🐛 Troubleshooting
-
-### **MySQL Driver Not Found**
-```
-Error: Cannot find mysql-connector-java-8.0.33.jar
-
-Solution:
-1. Download from: https://dev.mysql.com/downloads/connector/j/
-2. Place in: lib/mysql-connector-java-8.0.33.jar
-```
-
-### **Failed to Connect to Database**
-```
-Error: Connection refused / Access denied
-
-Solution:
-1. Verify MySQL is running: mysql -u root -p
-2. Check credentials in config.properties
-3. Ensure database exists: CREATE DATABASE jscan_sec;
-```
-
-### **Config File Not Found**
-```
-Error: Config file not found! Using defaults
-
-Solution:
-1. Create: mkdir -p config
-2. Create: config/config.properties
-3. Copy settings from configuration reference above
-```
-
-### **Java Version Too Old**
-```
-Error: Unsupported class version
-
-Solution:
-Install Java 17+: https://www.oracle.com/java/technologies/downloads/
-```
-
-### **Compilation Errors**
-```
-Error: Cannot find symbol
-
-Solution:
-1. Verify MySQL JDBC driver is in lib/
-2. Check all .java files are in src/main/java/forensics/
-3. Recompile: ./compile.sh
-```
-
----
 
 ## 📈 Performance Benchmarks
 
@@ -345,20 +277,6 @@ Solution:
 - **System Administration** - Network and service monitoring
 - **Security Education** - Learning cybersecurity concepts
 - **Compliance** - Audit trails and historical tracking
-
----
-
-## 🏆 Resume Points
-
-Demonstrates expertise in:
-- Multi-threaded Java programming
-- Network security and scanning
-- Database integration (MySQL)
-- Professional logging systems
-- Input validation and error handling
-- Design patterns (Strategy Pattern)
-- SSL/TLS cryptography
-- HTTP protocol analysis
 
 ---
 
