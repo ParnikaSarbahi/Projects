@@ -1,0 +1,42 @@
+[2026-07-02 22:03:06] [INFO] Config loaded successfully.
+[2026-07-02 22:03:06] [INFO] Starting port scan on scanme.nmap.org [ports 1-100]
+[2026-07-02 22:03:06] [INFO] Using 50 threads, 500ms timeout per port.
+[2026-07-02 22:03:22] [INFO] Port scan complete. 2 open port(s) found.
+[2026-07-02 22:06:50] [INFO] Starting web vulnerability scan on: http://testphp.vulnweb.com
+[2026-07-02 22:06:50] [INFO] Config loaded successfully.
+[2026-07-02 22:07:35] [ERROR] Error checking headers: Connect timed out
+[2026-07-02 22:07:40] [ERROR] Error checking HTTP methods: Connect timed out
+[2026-07-02 22:07:40] [INFO] Web vulnerability scan complete.
+[2026-07-02 22:09:12] [INFO] Starting web vulnerability scan on: http://example.com
+[2026-07-02 22:09:12] [INFO] Config loaded successfully.
+[2026-07-02 22:09:12] [INFO] Web vulnerability scan complete.
+[2026-07-02 22:11:39] [INFO] Starting DNS reconnaissance on: google.com
+[2026-07-03 09:20:02] [INFO] Starting DNS reconnaissance on: google.com
+[2026-07-03 09:42:48] [INFO] Analysing SSL/TLS certificate for: github.com
+[2026-07-03 09:42:49] [ERROR] Certificate analysis failed: connection not yet open
+[2026-07-03 09:42:49] [INFO] Certificate analysis complete.
+[2026-07-03 09:48:18] [INFO] Analysing SSL/TLS certificate for: github.com
+[2026-07-03 09:48:19] [INFO] Certificate analysis complete.
+[2026-07-03 09:49:41] [INFO] Starting authentication test on: http://httpbin.org/basic-auth/admin/admin
+[2026-07-03 09:49:42] [WARN] Valid credentials found: admin:admin on http://httpbin.org/basic-auth/admin/admin
+[2026-07-03 09:49:49] [INFO] Authentication testing complete.
+[2026-07-03 10:26:22] [INFO] Config loaded successfully.
+[2026-07-03 10:26:22] [ERROR] Could not connect to database: Unknown database 'jscan_sec'
+[2026-07-03 10:26:30] [WARN] Database not connected.
+[2026-07-03 10:26:45] [INFO] Starting log analysis...
+[2026-07-03 10:26:45] [WARN] Suspicious entry: Failed password for invalid user admin from 192.168.1.1 port 22 ssh2
+[2026-07-03 10:26:45] [INFO] Successful login: Accepted password for user1 from 192.168.1.2 port 22 ssh2
+[2026-07-03 10:26:45] [WARN] Suspicious entry: Failed password for root from 192.168.1.3 port 22 ssh2
+[2026-07-03 10:26:45] [INFO] Log analysis complete.
+[2026-07-03 10:26:45] [WARN] Database not connected — scan result not saved.
+[2026-07-03 10:28:26] [INFO] Config loaded successfully.
+[2026-07-03 10:28:26] [ERROR] Could not connect to database: Unknown database 'jscan_sec'
+[2026-07-03 10:29:29] [INFO] Config loaded successfully.
+[2026-07-03 10:29:29] [INFO] Connected to MySQL database: ScanSec
+[2026-07-03 10:29:42] [INFO] Starting log analysis...
+[2026-07-03 10:29:42] [WARN] Suspicious entry: Failed password for invalid user admin from 192.168.1.1 port 22 ssh2
+[2026-07-03 10:29:42] [INFO] Successful login: Accepted password for user1 from 192.168.1.2 port 22 ssh2
+[2026-07-03 10:29:42] [WARN] Suspicious entry: Failed password for root from 192.168.1.3 port 22 ssh2
+[2026-07-03 10:29:42] [INFO] Log analysis complete.
+[2026-07-03 10:29:42] [INFO] Scan result saved to database.
+[2026-07-03 10:47:50] [INFO] Database connection closed.
