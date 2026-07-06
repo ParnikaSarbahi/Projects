@@ -1,0 +1,68 @@
+{
+  "manifest_version": 3,
+  "name": "NotebookOS",
+  "version": "1.0.0",
+  "description": "Your browser's college bag — context-aware notes that auto-link to every webpage, organized into subject notebooks, synced via your Google account.",
+
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "scripting",
+    "contextMenus",
+    "sidePanel"
+  ],
+
+  "host_permissions": ["<all_urls>"],
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "32":  "icons/icon32.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "action": {
+    "default_title": "NotebookOS — Open notes for this page",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
+
+  "commands": {
+    "open-panel": {
+      "suggested_key": { "default": "Ctrl+Shift+N", "mac": "Command+Shift+N" },
+      "description": "Open NotebookOS side panel"
+    },
+    "toggle-overlay": {
+      "suggested_key": { "default": "Ctrl+Shift+O", "mac": "Command+Shift+O" },
+      "description": "Toggle floating overlay"
+    }
+  },
+
+  "side_panel": { "default_path": "pages/sidepanel.html" },
+  "background": { "service_worker": "scripts/background.js" },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/content.js"],
+      "css": ["styles/overlay.css"],
+      "run_at": "document_idle",
+      "exclude_matches": [
+        "https://chrome.google.com/*"
+      ]
+    }
+  ],
+
+  "options_page": "pages/dashboard.html",
+
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "pages/onboarding.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

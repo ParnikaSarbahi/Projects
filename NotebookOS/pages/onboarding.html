@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Welcome to NotebookOS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FAFAF8;
+      --card: #FFFFFF;
+      --border: #E8E8E4;
+      --text: #1A1A1A;
+      --muted: #6B6B6B;
+      --dim: #A0A0A0;
+      --accent: #1A1A1A;
+      --blue: #BFD7EA;
+      --green: #C8E6C9;
+      --amber: #FFE0B2;
+      --rose: #FADADD;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px 80px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Hero */
+    .hero { text-align: center; max-width: 560px; margin-bottom: 64px; }
+
+    .hero-icon {
+      font-size: 4rem;
+      display: block;
+      margin-bottom: 24px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+
+    .hero h1 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 2.6rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 150ms ease;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    /* Features grid */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 64px;
+    }
+
+    .feat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      animation: fadeUp 400ms ease both;
+    }
+    .feat-card:nth-child(1) { animation-delay: 0ms; }
+    .feat-card:nth-child(2) { animation-delay: 80ms; }
+    .feat-card:nth-child(3) { animation-delay: 160ms; }
+    .feat-card:nth-child(4) { animation-delay: 240ms; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .feat-icon {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .feat-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .feat-desc {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Color accent strips on cards */
+    .feat-card:nth-child(1) { border-top: 3px solid var(--blue); }
+    .feat-card:nth-child(2) { border-top: 3px solid var(--green); }
+    .feat-card:nth-child(3) { border-top: 3px solid var(--amber); }
+    .feat-card:nth-child(4) { border-top: 3px solid var(--rose); }
+
+    /* Shortcuts table */
+    .shortcuts {
+      width: 100%; max-width: 560px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 64px;
+    }
+
+    .shortcuts h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .shortcut-row:last-child { border-bottom: none; }
+
+    .shortcut-desc { font-size: 0.88rem; color: var(--muted); }
+
+    .kbd-group { display: flex; gap: 4px; align-items: center; }
+
+    kbd {
+      display: inline-block;
+      padding: 3px 8px;
+      background: #F0EFEC;
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .plus { font-size: 0.7rem; color: var(--dim); }
+
+    /* How it works */
+    .steps {
+      width: 100%; max-width: 560px;
+      margin-bottom: 64px;
+    }
+
+    .steps h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .step-num {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step-body { flex: 1; }
+    .step-title { font-weight: 500; margin-bottom: 4px; }
+    .step-desc  { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--dim);
+    }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <div class="hero">
+    <span class="hero-icon">📓</span>
+    <h1>Welcome to NotebookOS</h1>
+    <p>Your browser's college bag. Notes that live on the page, organized like subjects, synced everywhere you sign in.</p>
+    <a href="#" class="btn-primary" id="btn-dashboard">
+      Open Dashboard →
+    </a>
+  </div>
+
+  <!-- Feature cards -->
+  <div class="features">
+    <div class="feat-card">
+      <span class="feat-icon">🔗</span>
+      <div class="feat-title">URL-linked notes</div>
+      <div class="feat-desc">Notes are bound to exact URLs. Revisit any page and your notes reload automatically — no searching.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">📚</span>
+      <div class="feat-title">Subject notebooks</div>
+      <div class="feat-desc">Organize pages into notebooks like college subjects. OS, DBMS, Cyber Security — your call.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">☁️</span>
+      <div class="feat-title">Synced everywhere</div>
+      <div class="feat-desc">Uses Chrome Sync. Notes follow your Google account across every device you use Chrome on.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">✍️</span>
+      <div class="feat-title">Rich editor</div>
+      <div class="feat-desc">Headings, lists, code blocks, highlights, slash commands. Type <code style="background:#f0efec;padding:1px 5px;border-radius:3px;font-size:0.9em">/</code> anywhere to insert blocks.</div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="steps">
+    <h2>How it works</h2>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Open any webpage</div>
+        <div class="step-desc">Navigate to any site — a Wikipedia article, a documentation page, a research paper.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Click the NotebookOS icon</div>
+        <div class="step-desc">The side panel opens. If you've been here before, your notes load instantly. First visit? You'll be asked to choose a notebook.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Write — it saves automatically</div>
+        <div class="step-desc">Notes autosave every 2.5 seconds after you stop typing. No save button needed.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Come back anytime</div>
+        <div class="step-desc">Revisit the same URL — notes are right there, exactly as you left them. No searching, no organizing.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shortcuts -->
+  <div class="shortcuts">
+    <h2>Keyboard shortcuts</h2>
+
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Open side panel</span>
+      <div class="kbd-group"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Shift</kbd><span class="plus">+</span><kbd>N</kbd></div>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Toggle floating overlay</span>
+      <div class="kbd-group"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Shift</kbd><span class="plus">+</span><kbd>O</kbd></div>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Slash command menu</span>
+      <div class="kbd-group"><kbd>/</kbd> <span class="plus" style="margin-left:4px">at line start</span></div>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Bold</span>
+      <div class="kbd-group"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>B</kbd></div>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Italic</span>
+      <div class="kbd-group"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>I</kbd></div>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Insert link</span>
+      <div class="kbd-group"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>K</kbd></div>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Inline code</span>
+      <div class="kbd-group"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>`</kbd></div>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Force save</span>
+      <div class="kbd-group"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>S</kbd></div>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Add selection to notes</span>
+      <div class="kbd-group"><span class="plus">Right-click → </span><kbd>Add to NotebookOS</kbd></div>
+    </div>
+  </div>
+
+  <footer>
+    NotebookOS v1.0 · <a href="#" id="btn-dashboard-footer">Dashboard</a>
+  </footer>
+
+<script>
+  function openDashboard() {
+    chrome.tabs.create({ url: chrome.runtime.getURL("pages/dashboard.html") });
+  }
+  document.getElementById("btn-dashboard").addEventListener("click", function(e) {
+    e.preventDefault(); openDashboard();
+  });
+  document.getElementById("btn-dashboard-footer").addEventListener("click", function(e) {
+    e.preventDefault(); openDashboard();
+  });
+</script>
+</body>
+</html>
