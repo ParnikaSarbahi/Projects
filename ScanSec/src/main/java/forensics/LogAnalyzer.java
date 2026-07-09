@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class LogAnalyzer implements ForensicAnalyzer {
 
-    // How many failures from one IP before we call it suspicious
     private static final int BRUTE_FORCE_THRESHOLD = 3;
 
     @Override
@@ -26,7 +25,6 @@ public class LogAnalyzer implements ForensicAnalyzer {
             int failedCount = 0;
             int successCount = 0;
 
-            // Track how many failures per IP address
             Map<String, Integer> failuresByIP = new HashMap<>();
 
             while ((line = reader.readLine()) != null) {
@@ -34,7 +32,6 @@ public class LogAnalyzer implements ForensicAnalyzer {
                     failedCount++;
                     Logger.warn("Suspicious entry: " + line);
 
-                    // Extract IP address from the log line
                     String ip = extractIP(line);
                     if (ip != null) {
                         failuresByIP.put(ip, failuresByIP.getOrDefault(ip, 0) + 1);
@@ -46,12 +43,10 @@ public class LogAnalyzer implements ForensicAnalyzer {
                 }
             }
 
-            // Print summary
             System.out.println("\n========== LOG ANALYSIS SUMMARY ==========");
             System.out.println("Total failed login attempts : " + failedCount);
             System.out.println("Total successful logins     : " + successCount);
 
-            // Flag IPs that crossed the brute force threshold
             System.out.println("\n--- Potential Brute Force Attackers ---");
             boolean found = false;
             for (Map.Entry<String, Integer> entry : failuresByIP.entrySet()) {
@@ -72,8 +67,6 @@ public class LogAnalyzer implements ForensicAnalyzer {
         }
     }
 
-    // Pull the IP address out of a log line like:
-    // "Failed password for root from 192.168.1.3 port 22 ssh2"
     private String extractIP(String line) {
         String[] words = line.split(" ");
         for (int i = 0; i < words.length; i++) {
