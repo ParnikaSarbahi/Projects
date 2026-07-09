@@ -31,16 +31,6 @@ public class AuthenticationTester implements ForensicAnalyzer {
         scanner.close();
     }
 
-    /*
-     * Many devices and web apps ship with default credentials
-     * that admins forget to change — admin/admin, root/root, etc.
-     * This tests for them using HTTP Basic Authentication,
-     * which sends credentials as Base64(username:password) in
-     * the Authorization header.
-     *
-     * Base64 is NOT encryption — it's just encoding.
-     * That's why Basic Auth over plain HTTP is dangerous.
-     */
     private static void testDefaultCredentials(String target) {
         String[][] credentials = {
             {"admin",  "admin"},
@@ -70,23 +60,23 @@ public class AuthenticationTester implements ForensicAnalyzer {
             int code = tryCredential(target, username, password);
 
             if (code == 200) {
-                System.out.println("✅ SUCCESS : " + username + " / " + password
+                System.out.println("SUCCESS : " + username + " / " + password
                     + "  (HTTP " + code + ")");
                 Logger.warn("Valid credentials found: " + username + ":" + password
                     + " on " + target);
                 successCount++;
             } else if (code == 401) {
-                System.out.println("❌ FAILED  : " + username + " / "
+                System.out.println("FAILED  : " + username + " / "
                     + (password.isEmpty() ? "(empty)" : password)
                     + "  (HTTP 401 Unauthorized)");
             } else if (code == 403) {
-                System.out.println("🔒 BLOCKED : " + username + " / " + password
+                System.out.println("BLOCKED : " + username + " / " + password
                     + "  (HTTP 403 — account may be locked)");
             } else if (code == -1) {
-                System.out.println("⚠️  ERROR   : Could not connect for "
+                System.out.println("ERROR   : Could not connect for "
                     + username + " / " + password);
             } else {
-                System.out.println("ℹ️  UNKNOWN : " + username + " / " + password
+                System.out.println("UNKNOWN : " + username + " / " + password
                     + "  (HTTP " + code + ")");
             }
         }
@@ -107,11 +97,6 @@ public class AuthenticationTester implements ForensicAnalyzer {
             conn.setConnectTimeout(4000);
             conn.setReadTimeout(4000);
 
-            /*
-             * HTTP Basic Auth header format:
-             * Authorization: Basic Base64(username:password)
-             * e.g. admin:admin → YWRtaW46YWRtaW4=
-             */
             String credentials = username + ":" + password;
             String encoded = Base64.getEncoder().encodeToString(credentials.getBytes());
             conn.setRequestProperty("Authorization", "Basic " + encoded);
