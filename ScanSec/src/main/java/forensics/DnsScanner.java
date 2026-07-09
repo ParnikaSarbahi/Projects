@@ -38,11 +38,6 @@ public class DnsScanner implements ForensicAnalyzer {
         scanner.close();
     }
 
-    // ----------------------------------------------------------------
-    // Step 1: Resolve the domain to its IP addresses
-    // A domain can map to multiple IPs (load balancing, CDN, etc.)
-    // InetAddress.getAllByName() returns all of them.
-    // ----------------------------------------------------------------
     private static void resolveHostname(String domain) {
         System.out.println("\n🔍 A Record Lookup (Domain → IP):");
         try {
@@ -56,18 +51,12 @@ public class DnsScanner implements ForensicAnalyzer {
         }
     }
 
-    // ----------------------------------------------------------------
-    // Step 2: Reverse DNS lookup
-    // Goes IP → hostname. Reveals the canonical name the server uses,
-    // which can be different from what you typed.
-    // e.g. 142.250.80.46 → lga34s32-in-f14.1e100.net (Google)
-    // ----------------------------------------------------------------
+  
     private static void reverseLookupsOnIPs(String domain) {
         System.out.println("\n🔁 Reverse DNS Lookup (IP → Hostname):");
         try {
             InetAddress[] addresses = InetAddress.getAllByName(domain);
             for (InetAddress addr : addresses) {
-                // getCanonicalHostName() does the PTR record lookup
                 String reverse = addr.getCanonicalHostName();
                 System.out.println("  " + addr.getHostAddress() + " → " + reverse);
             }
@@ -76,14 +65,7 @@ public class DnsScanner implements ForensicAnalyzer {
         }
     }
 
-    // ----------------------------------------------------------------
-    // Step 3: Subdomain enumeration
-    // Try common subdomains and see which ones resolve.
-    // This is basic subdomain brute-forcing — a standard recon technique.
-    // Real attackers use wordlists with thousands of subdomains.
-    // Finding live subdomains reveals forgotten or unprotected services.
-    // ----------------------------------------------------------------
-    private static void checkCommonSubdomains(String domain) {
+      private static void checkCommonSubdomains(String domain) {
         String[] subdomains = {
             "www", "mail", "ftp", "admin", "api", "dev",
             "staging", "test", "vpn", "remote", "portal",
@@ -101,7 +83,6 @@ public class DnsScanner implements ForensicAnalyzer {
                 System.out.println("  ✅ FOUND: " + fullDomain + " → " + addr.getHostAddress());
                 found++;
             } catch (UnknownHostException e) {
-                // Subdomain doesn't exist, skip silently
             }
         }
 
