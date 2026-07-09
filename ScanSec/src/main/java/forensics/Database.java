@@ -6,12 +6,6 @@ import java.time.LocalDateTime;
 public class Database {
 
     private static Connection connection = null;
-
-    // ----------------------------------------------------------------
-    // Opens a connection to MySQL using credentials from config.
-    // We reuse one connection for the whole session (connection pooling
-    // is overkill for a CLI tool — one connection is fine here).
-    // ----------------------------------------------------------------
     public static boolean connect() {
         try {
             String host = Config.get("db.host");
@@ -33,14 +27,6 @@ public class Database {
         }
     }
 
-    // ----------------------------------------------------------------
-    // Saves a scan result to the database.
-    // Called by each scanner after it finishes.
-    //
-    // PreparedStatement is important here — never build SQL strings
-    // by concatenating user input. That's how SQL injection happens.
-    // PreparedStatement handles escaping automatically.
-    // ----------------------------------------------------------------
     public static void saveScanResult(String scanType, String target,
                                        String result, String status,
                                        String errorMessage, long executionTimeMs) {
@@ -70,9 +56,6 @@ public class Database {
         }
     }
 
-    // ----------------------------------------------------------------
-    // Retrieves and prints all past scan history.
-    // ----------------------------------------------------------------
     public static void printScanHistory() {
         if (connection == null) {
             Logger.warn("Database not connected.");
